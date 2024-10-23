@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSR Motors - Lead Details</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+<h2 class="text-center">Lead Details</h2>
+<form id="leadForm">
+<div class="form-group">
+<label for="leadName">Name</label>
+<input type="text" class="form-control" id="leadName" readonly>
+</div>
+<div class="form-group">
+<label for="leadPhone">Phone</label>
+<input type="text" class="form-control" id="leadPhone" readonly>
+</div>
+<div class="form-group">
+<label for="leadStatus">Status</label>
+<select class="form-control" id="leadStatus">
+<option value="New">New</option>
+<option value="Contacted">Contacted</option>
+<option value="Not Interested">Not Interested</option>
+<option value="Qualified">Qualified</option>
+</select>
+</div>
+<button type="submit" class="btn btn-success">Save</button>
+</form>
+</div>
+
+<script>
+// Fetch lead data from URL parameter
+const urlParams = new URLSearchParams(window.location.search);
+const leadIndex = urlParams.get('index');
+const lead = JSON.parse(localStorage.getItem('leads'))[leadIndex];
+
+// Populate form fields
+$('#leadName').val(lead.name);
+$('#leadPhone').val(lead.phone);
+$('#leadStatus').val(lead.status);
+
+// Save lead updates
+$('#leadForm').submit(function (e) {
+e.preventDefault();
+lead.status = $('#leadStatus').val();
+const leads = JSON.parse(localStorage.getItem('leads'));
+leads[leadIndex] = lead;
+localStorage.setItem('leads', JSON.stringify(leads));
+alert('Lead updated successfully!');
+});
+</script>
+</body>
+</html>

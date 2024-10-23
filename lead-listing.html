@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSR Motors - Lead Listing</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+<h2 class="text-center">Lead Listing - HSR Motors</h2>
+<div class="row my-3">
+<div class="col-md-4">
+<input type="text" id="searchLead" class="form-control" placeholder="Search by Name or Phone">
+</div>
+<div class="col-md-4">
+<select id="statusFilter" class="form-control">
+<option value="">Filter by Status</option>
+<option value="New">New</option>
+<option value="Contacted">Contacted</option>
+<option value="Not Interested">Not Interested</option>
+<option value="Qualified">Qualified</option>
+</select>
+</div>
+</div>
+
+<table class="table table-hover table-bordered">
+<thead class="thead-dark">
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Status</th>
+<th>Lead Source</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="leadTableBody">
+<!-- Leads will be dynamically inserted here -->
+</tbody>
+</table>
+</div>
+
+<script>
+// Sample Data (Mock Leads)
+const leads = [
+{ name: "John Doe", phone: "9876543210", status: "New", source: "Facebook" },
+{ name: "Jane Smith", phone: "9123456789", status: "Contacted", source: "Twitter" },
+{ name: "Robert Brown", phone: "9998887776", status: "Qualified", source: "Google" }
+];
+
+// Render Leads in Table
+function renderLeads(filteredLeads = leads) {
+const tbody = $("#leadTableBody");
+tbody.empty(); // Clear existing rows
+filteredLeads.forEach((lead, index) => {
+tbody.append(`
+<tr>
+<td>${lead.name}</td>
+<td>${lead.phone}</td>
+<td>${lead.status}</td>
+<td>${lead.source}</td>
+<td>
+<a href="lead-details.html?index=${index}" class="btn btn-primary btn-sm">View</a>
+</td>
+</tr>
+`);
+});
+}
+
+// Search and Filter Logic
+$("#searchLead").on("input", function () {
+const query = $(this).val().toLowerCase();
+const filteredLeads = leads.filter(lead =>
+lead.name.toLowerCase().includes(query) || lead.phone.includes(query)
+);
+renderLeads(filteredLeads);
+});
+
+$("#statusFilter").change(function () {
+const status = $(this).val();
+const filteredLeads = status ? leads.filter(lead => lead.status === status) : leads;
+renderLeads(filteredLeads);
+});
+
+// Initial Render
+renderLeads();
+</script>
+</body>
+</html>
